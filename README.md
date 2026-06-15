@@ -1,4 +1,4 @@
-# tmux-pane-status
+# tmux-pane-agent-status
 
 Live status labels in tmux window tabs and status bar — see at a glance which panes have a
 running coding agent (⟳), which are idle at a shell prompt (⌄), which have an
@@ -31,7 +31,7 @@ You see at a glance: opencode working, codex waiting for input, claude working.
 Add to `~/.tmux.conf`:
 
 ```tmux
-set -g @plugin 'duyet/tmux-pane-status'
+set -g @plugin 'duyet/tmux-pane-agent-status'
 ```
 
 Then `<prefix> + I` to install. Labels appear immediately on next window split.
@@ -39,13 +39,13 @@ Then `<prefix> + I` to install. Labels appear immediately on next window split.
 ### Manual
 
 ```bash
-git clone https://github.com/duyet/tmux-pane-status ~/.tmux/plugins/tmux-pane-status
+git clone https://github.com/duyet/tmux-pane-agent-status ~/.tmux/plugins/tmux-pane-agent-status
 ```
 
 Add to `~/.tmux.conf`:
 
 ```tmux
-source-file ~/.tmux/plugins/tmux-pane-status/tmux-pane-status.tmux
+source-file ~/.tmux/plugins/tmux-pane-agent-status/tmux-pane-agent-status.tmux
 ```
 
 ### Standalone (tab labels only)
