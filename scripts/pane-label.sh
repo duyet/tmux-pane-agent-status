@@ -23,14 +23,32 @@ set -euo pipefail
 
 pane_id="${1:?}"
 cmd=$(tmux display -t "$pane_id" -p '#{pane_current_command}' 2>/dev/null || true)
+pid=$(tmux display -t "$pane_id" -p '#{pane_pid}' 2>/dev/null || true)
 
 # Guard: pane gone or command unreadable
 [ -z "$cmd" ] && { echo "?"; exit 0; }
 
 case "${cmd}" in
-  # AI coding agents — actively running / processing
-  opencode|claude|codex|cursor|"cursor-agent")
+  # AI coding agents — binary-based, process name matches
+  opencode|claude|codex|cursor|"cursor-agent"|agy|grok|agent|cr|coderabbit)
     echo "⟳ ${cmd}"
+    ;;
+
+  # Python-based agents — process shows as python/python3
+  python|python3)
+    name=""
+    if [ -n "$pid" ]; then
+      full_cmd=$(ps -o command= -p "$pid" 2>/dev/null || true)
+      case "$full_cmd" in
+        *hermes*)      name="hermes"      ;;
+        *SuperClaude*) name="SuperClaude" ;;
+      esac
+    fi
+    if [ -n "$name" ]; then
+      echo "⟳ $name"
+    else
+      echo "🐍 python"
+    fi
     ;;
 
   # Shells — idle, waiting at prompt
@@ -45,7 +63,6 @@ case "${cmd}" in
   # Dev tooling running
   node|npm|npx)      echo "⚡ ${cmd}"    ;;
   bun|deno)          echo "⚡ ${cmd}"    ;;
-  python|python3)    echo "🐍 python"    ;;
   make|cargo|go|rustc|just) echo "🔨 ${cmd}" ;;
 
   # Remote sessions
